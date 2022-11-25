@@ -54,7 +54,7 @@ async function run() {
 
         app.post('/bookings', async (req, res) => {
             const booking = req.body;
-            console.log(booking);
+            // console.log(booking);
             const result = await bookingsCollection.insertOne(booking);
             res.send(result);
         })
@@ -63,6 +63,13 @@ async function run() {
 
 
         // users
+
+        app.get('/users/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const user = await usersCollection.findOne(query);
+            res.send({ isAdmin: user?.role === 'admin' });
+        })
 
         app.post('/users', async (req, res) => {
             const user = req.body
