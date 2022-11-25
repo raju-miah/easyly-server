@@ -26,12 +26,27 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         const categoryCollection = client.db('easylyEcom').collection('category');
+        const usersCollection = client.db('easylyEcom').collection('users');
 
         app.get('/category', async (req, res) => {
             const query = {};
             const category = await categoryCollection.find(query).toArray();
             res.send(category);
+        });
+
+
+
+        // users
+
+        app.post('/users', async (req, res) => {
+            const user = req.body
+            // console.log(user);
+            const result = await usersCollection.insertOne(user);
+            res.send(result);
         })
+
+
+
     }
     finally {
 
