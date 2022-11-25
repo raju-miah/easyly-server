@@ -27,6 +27,7 @@ async function run() {
     try {
         const categoryCollection = client.db('easylyEcom').collection('category');
         const usersCollection = client.db('easylyEcom').collection('users');
+        const bookingsCollection = client.db('easylyEcom').collection('bookings');
 
         app.get('/category', async (req, res) => {
             const query = {};
@@ -39,6 +40,16 @@ async function run() {
             const query = { _id: ObjectId(id) };
             const product = await categoryCollection.findOne(query);
             res.send(product);
+        });
+
+
+        // booking 
+
+        app.post('/bookings', async (req, res) => {
+            const booking = req.body;
+            console.log(booking);
+            const result = await bookingsCollection.insertOne(booking);
+            res.send(result);
         })
 
 
