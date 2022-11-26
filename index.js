@@ -26,6 +26,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         const categoryCollection = client.db('easylyEcom').collection('category');
+        const productsCollection = client.db('easylyEcom').collection('products');
         const usersCollection = client.db('easylyEcom').collection('users');
         const bookingsCollection = client.db('easylyEcom').collection('bookings');
 
@@ -37,10 +38,19 @@ async function run() {
 
         app.get('/category/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const product = await categoryCollection.findOne(query);
+            const query = { brandName: id };
+            const product = await productsCollection.find(query).toArray();
             res.send(product);
         });
+
+        // For add product
+        app.post('/addproducts', async (req, res) => {
+            const products = req.body;
+            console.log('in body', products);
+            const result = await productsCollection.insertOne(products);
+            console.log('in insert', result)
+            res.send(result);
+        })
 
 
         // booking 
