@@ -44,6 +44,7 @@ async function run() {
         });
 
         // For add product
+
         app.post('/addproducts', async (req, res) => {
             const products = req.body;
             console.log('in body', products);
@@ -52,6 +53,7 @@ async function run() {
             res.send(result);
         })
 
+        // for get product in my product
 
         app.get('/myproduct', async (req, res) => {
             const email = req.query.email;
@@ -59,6 +61,16 @@ async function run() {
             const myproduct = await productsCollection.find(query).toArray();
             res.send(myproduct);
         })
+
+        // for delete product
+
+        app.delete('/myproduct/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await productsCollection.deleteOne(query);
+            res.send(result);
+        });
+
 
         // booking 
 
