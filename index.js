@@ -108,6 +108,21 @@ async function run() {
             res.send(result);
         })
 
+        app.put('/users', async (req, res) => {
+            const user = req.body
+            // console.log(user);
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    role: 'buyer'
+                }
+            }
+            const result = await usersCollection.updateOne(user, updatedDoc, options);
+            res.send(result);
+        })
+
+
+
 
         app.delete('/users/:id', async (req, res) => {
             const id = req.params.id;
