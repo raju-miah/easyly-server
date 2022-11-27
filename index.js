@@ -26,15 +26,25 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         const categoryCollection = client.db('easylyEcom').collection('category');
+
         const productsCollection = client.db('easylyEcom').collection('products');
+
+        const advertiseCollection = client.db('easylyEcom').collection('advertise');
+
         const usersCollection = client.db('easylyEcom').collection('users');
+
         const bookingsCollection = client.db('easylyEcom').collection('bookings');
+
+
+        // category
 
         app.get('/category', async (req, res) => {
             const query = {};
             const category = await categoryCollection.find(query).toArray();
             res.send(category);
         });
+
+
 
         app.get('/category/:id', async (req, res) => {
             const id = req.params.id;
@@ -47,11 +57,36 @@ async function run() {
 
         app.post('/addproducts', async (req, res) => {
             const products = req.body;
-            console.log('in body', products);
+            // console.log('in body', products);
             const result = await productsCollection.insertOne(products);
-            console.log('in insert', result)
+            // console.log('in insert', result)
             res.send(result);
         })
+
+
+
+        // adddd
+
+        app.get('/advertise', async (req, res) => {
+            const query = {};
+            const result = await advertiseCollection.find(query).toArray();
+            res.send(result);
+        })
+
+        app.post('/advertise', async (req, res) => {
+            const add = req.body;
+            const result = await advertiseCollection.insertOne(add);
+            res.send(result);
+        })
+
+        app.delete('/advertise/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { id: id };
+            const result = await advertiseCollection.deleteOne(query);
+            res.send(result);
+        });
+
+
 
         // for get product in my product
 
@@ -89,8 +124,6 @@ async function run() {
         })
 
 
-
-
         // users
 
         app.get('/users/admin/:email', async (req, res) => {
@@ -98,6 +131,8 @@ async function run() {
             const query = { email };
             const user = await usersCollection.findOne(query);
             res.send({ isAdmin: user?.role === 'admin' });
+            // res.send(user);
+            // console.log(user);
         });
 
 
