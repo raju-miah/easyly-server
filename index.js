@@ -35,6 +35,8 @@ async function run() {
 
         const bookingsCollection = client.db('easylyEcom').collection('bookings');
 
+        const reportsCollection = client.db('easylyEcom').collection('reports');
+
 
         // category
 
@@ -65,7 +67,7 @@ async function run() {
 
 
 
-        // adddd
+        // advertise product
 
         app.get('/advertise', async (req, res) => {
             const query = {};
@@ -123,8 +125,29 @@ async function run() {
             res.send(result);
         })
 
+        // report to admin
 
-        // users
+        app.get('/report', async (req, res) => {
+            const query = {};
+            const report = await reportsCollection.find(query).toArray();
+            res.send(report);
+        })
+
+        app.post('/report', async (req, res) => {
+            const report = req.body;
+            const result = await reportsCollection.insertOne(report);
+            res.send(result);
+        })
+
+        app.delete('/report/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await reportsCollection.deleteOne(query);
+            res.send(result);
+        });
+
+
+        // for users base route
 
         app.get('/users/admin/:email', async (req, res) => {
             const email = req.params.email;
@@ -153,10 +176,7 @@ async function run() {
 
 
 
-
-
-
-
+        // all users
 
         app.get('/users', async (req, res) => {
             const query = {};
@@ -184,8 +204,6 @@ async function run() {
             const result = await usersCollection.updateOne(user, updatedDoc, options);
             res.send(result);
         })
-
-
 
 
         app.delete('/users/:id', async (req, res) => {
